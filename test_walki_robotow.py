@@ -46,4 +46,22 @@ class TestWalkiRobotow(unittest.TestCase):
             test_data.append([n, n])
         for n in range(100001, 200001):
             test_data.append([n, 300000 - n + 1])
-        self.assertTrue(test_data)
+        self.assertTrue(eliminate(test_data))
+
+    def test_5ocen(self):
+        test_data=[[5, 2], [1, 1],[3, 3], [4, 5], [2, 4]]
+        self.assertTrue(eliminate(test_data))
+
+    def test_wal2ocen(self):
+        test_data = [
+            [19, 11], [1, 6],
+            [10, 4], [7, 5],
+            [14, 15], [3, 12],
+            [5, 2], [15, 18],
+            [8, 9], [18, 19],
+            [11, 14], [4, 16],
+            [12, 13], [17, 7],
+            [6, 1], [9, 10],
+            [16, 8], [2, 3],
+            [13, 17], [20, 20]]
+        self.assertFalse(eliminate(test_data))
