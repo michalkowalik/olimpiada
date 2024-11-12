@@ -9,9 +9,7 @@ def eliminate(robots):
     robots.sort(key = lambda x: x[0])
     max_s_robot = robots[-1]
 
-    if max_s_robot[1] < max_z_robot[1]:
-        return True
-    return False
+    return max_s_robot[1] < max_z_robot[1]
 
 
 def main():
