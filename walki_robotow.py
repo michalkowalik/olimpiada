@@ -26,6 +26,10 @@ def main():
             robots.append([int(x) for x in line.split()])
             line_index += 1
 
+    if robot_count < 1 or robot_count > 200000:
+        print("TAK")
+        return
+
     if eliminate(robots):
         print("TAK")
     else:
