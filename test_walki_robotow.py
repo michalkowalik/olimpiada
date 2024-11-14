@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-from walki_robotow import eliminate
+from walki_robotow import eliminate_pairs
 
 class TestWalkiRobotow(unittest.TestCase):
     def test_przyklad_1(self):
@@ -10,25 +10,25 @@ class TestWalkiRobotow(unittest.TestCase):
             [2, 3],
             [3, 2],
             [4, 1]]
-        self.assertTrue(eliminate(test_data))
+        self.assertTrue(eliminate_pairs(test_data))
 
     def test_przyklad_2(self):
         test_data = [
             [1, 1],
             [2, 2]]
-        self.assertFalse(eliminate(test_data))
+        self.assertFalse(eliminate_pairs(test_data))
 
     def test_1ocen(self):
         test_data = []
         for n in range(1, 9):
             test_data.append([n, 8-n])
-        self.assertTrue(eliminate(test_data))
+        self.assertTrue(eliminate_pairs(test_data))
 
     def test_2ocen(self):
         test_data = []
         for n in range(1, 21):
             test_data.append([n, n])
-        self.assertFalse(eliminate(test_data))
+        self.assertFalse(eliminate_pairs(test_data))
 
     def test_3ocen(self):
         test_data = [
@@ -38,7 +38,7 @@ class TestWalkiRobotow(unittest.TestCase):
             [7,8], [8,7],
             [9,10], [10,9]
         ]
-        self.assertTrue(eliminate(test_data))
+        self.assertTrue(eliminate_pairs(test_data))
 
     def test_4ocen(self):
         test_data = []
@@ -46,11 +46,11 @@ class TestWalkiRobotow(unittest.TestCase):
             test_data.append([n, n])
         for n in range(100001, 200001):
             test_data.append([n, 300000 - n + 1])
-        self.assertTrue(eliminate(test_data))
+        self.assertTrue(eliminate_pairs(test_data))
 
     def test_5ocen(self):
         test_data=[[5, 2], [1, 1],[3, 3], [4, 5], [2, 4]]
-        self.assertTrue(eliminate(test_data))
+        self.assertTrue(eliminate_pairs(test_data))
 
     def test_wal2ocen(self):
         test_data = [
@@ -64,4 +64,4 @@ class TestWalkiRobotow(unittest.TestCase):
             [6, 1], [9, 10],
             [16, 8], [2, 3],
             [13, 17], [20, 20]]
-        self.assertFalse(eliminate(test_data))
+        self.assertFalse(eliminate_pairs(test_data))
