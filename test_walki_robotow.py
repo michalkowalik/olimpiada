@@ -21,7 +21,7 @@ class TestWalkiRobotow(unittest.TestCase):
     def test_1ocen(self):
         test_data = []
         for n in range(1, 9):
-            test_data.append([n, 8-n])
+            test_data.append([n, 9-n])
         self.assertTrue(eliminate_pairs(test_data))
 
     def test_2ocen(self):
@@ -65,3 +65,12 @@ class TestWalkiRobotow(unittest.TestCase):
             [16, 8], [2, 3],
             [13, 17], [20, 20]]
         self.assertFalse(eliminate_pairs(test_data))
+
+    def test2in(self):
+        test_data = [
+            [3, 5],
+            [4, 3],
+            [2, 1],
+            [1, 2],
+            [5, 4]]
+        self.assertTrue(eliminate_pairs(test_data))

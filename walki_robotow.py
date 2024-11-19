@@ -1,39 +1,70 @@
 #!/usr/bin/env python3
 import sys
 
-        
-def eliminate(robots):
-    robots.sort(key = lambda x: x[1])
-    max_z_robot = robots[-1]
+# prosty stos:
+class Stack:
+    stack = []
 
-    robots.sort(key = lambda x: x[0])
-    max_s_robot = robots[-1]
+    def push(self, item):
+        self.stack.append(item)
 
-    return max_s_robot[1] < max_z_robot[1]
+    def pop(self):
+        if len(self.stack) > 0:
+            return self.stack.pop()
+        raise Exception("Empty stack") 
 
+    def peep(self):
+        if len(self.stack) > 0:
+            return self.stack[-1]
+        raise Exception("Empty stack")
 
+    def is_empty(self):
+        return len(self.stack) == 0
+            
 
 # remove the pairs. an expensive approach
 def eliminate_pairs(robots):
-    robots.sort(key = lambda x : x[0])
-    # print(robots)
 
-    index = 0
+    # jeśli mamy tylko jednego robota, nie ma czego dalej sprawdzać:
+    if len(robots) < 2:
+        return False
 
-    while index < len(robots) - 1:
-        s1, z1 = robots[index]
-        s2, z2 = robots[index + 1]
+    # znajdź robota z największą zwinnością
+    robots.sort(key = lambda x : x[1])
+    max_z_robot = robots[-1]
 
-        if z1 < z2:
-            robots.pop(index)
-        elif z1 > z2:
-            robots.pop(index + 1)
-            robots.pop(index)     # because s1 < s2
-        else:
-            index += 1
+    # posortuj po sile
+    robots.sort(key = lambda x : (x[0], -x[1]))
+    stack = Stack()
+    
+    # jeśli najsilniejszy robot jest równiez najzwinniejszy, nie ma czego dalej sprawdzać
+    if robots[-1][1] == max_z_robot[1]:
+        return False
 
-    # print(robots)
-    return len(robots) == 0
+
+    for s, z in robots:
+        is_current_eliminated = False
+        while not stack.is_empty():
+            top_s, top_z = stack.peep()
+            
+            if (s > top_s) and (z > top_z):
+                # (s, z) jest silniejszy i zwinniejszy niz roboty na stosie
+                stack.pop()
+            elif (s < top_s) and (z < top_z):
+                # (s, z) przegra z kazdym robotem ze stosu
+                is_current_eliminated = True
+                break
+            else:
+                # (s, z) i robot z początku stosu usuwają się wzajemnie
+                stack.pop()
+                is_current_eliminated = True
+                break
+
+        # umieść robota na stosie, jeśli nie został wyeliminowany
+        if not is_current_eliminated:
+            stack.push((s, z))
+
+    return stack.is_empty()
 
 def main():
     robots = []
