@@ -22,8 +22,39 @@ class Stack:
         return len(self.stack) == 0
             
 
-# remove the pairs. an expensive approach
 def eliminate_pairs(robots):
+    """
+    Checks if it's possible to remove all pairs based on the given criteria.
+
+    Args:
+        pairs: A list of pairs (s, z), where s and z are non-negative integers.
+
+    Returns:
+        True if all pairs can be removed, False otherwise.
+    """
+
+    robots.sort()
+
+    if len(robots) < 2:
+        return False
+    
+
+    stack = []
+
+    for s, z in robots:
+        while stack:
+            top_s, top_z = stack[-1]
+            # Check for strict dominance or mutual destruction
+            if (s > top_s and z > top_z) or (s < top_s and z < top_z):
+                stack.pop()
+            else:
+                 break
+        stack.append((s, z))
+
+    return not stack
+
+# remove the pairs. an expensive approach
+def old_eliminate_pairs(robots):
 
     # jeśli mamy tylko jednego robota, nie ma czego dalej sprawdzać:
     if len(robots) < 2:
@@ -33,24 +64,28 @@ def eliminate_pairs(robots):
     robots.sort(key = lambda x : x[1])
     max_z_robot = robots[-1]
 
+    # usuwamy najzwinniejszego robota z listy.
+    robots.pop(-1)
+
     # posortuj po sile
     robots.sort(key = lambda x : (x[0], -x[1]))
     stack = Stack()
     
     # jeśli najsilniejszy robot jest równiez najzwinniejszy, nie ma czego dalej sprawdzać
-    if robots[-1][1] == max_z_robot[1]:
+    if max_z_robot[0] >= robots[-1][0]:
         return False
 
-
+    # usunęliśmy najzwinniejszego robota
+    # jeśli reszta się wzajemnie usunie -> wynik jest negatywny, bo zostaje jeden robot
     for s, z in robots:
         is_current_eliminated = False
         while not stack.is_empty():
             top_s, top_z = stack.peep()
             
-            if (s > top_s) and (z > top_z):
+            if (s >= top_s) and (z >= top_z):
                 # (s, z) jest silniejszy i zwinniejszy niz roboty na stosie
                 stack.pop()
-            elif (s < top_s) and (z < top_z):
+            elif (s <= top_s) and (z <= top_z):
                 # (s, z) przegra z kazdym robotem ze stosu
                 is_current_eliminated = True
                 break
@@ -64,7 +99,7 @@ def eliminate_pairs(robots):
         if not is_current_eliminated:
             stack.push((s, z))
 
-    return stack.is_empty()
+    return not stack.is_empty()
 
 def main():
     robots = []
