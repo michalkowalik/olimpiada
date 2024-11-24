@@ -84,3 +84,43 @@ class TestWalkiRobotow(unittest.TestCase):
             [1, 5],
             [2, 1]]
         self.assertTrue(eliminate_pairs(test_data))
+
+    def test17(self):
+        data = [
+            [2,2],
+            [1,3],
+            [3,1]]
+        self.assertFalse(eliminate_pairs(data))
+
+    def test25(self):
+        data = [
+            [3, 3],
+            [1, 5],
+            [4, 1], 
+            [6, 0],
+            [5, 4],
+            [2, 6],
+            [0, 2]]
+        self.assertTrue(eliminate_pairs(data))
+
+    def test35(self):
+        data = [
+            [0, 5],
+            [1, 1],
+            [3, 4],
+            [4, 6],
+            [5, 2],
+            [6, 0],
+            [2, 3]]
+        self.assertTrue(eliminate_pairs(data))
+
+    def test87(self):
+        data = [
+            [0, 0],
+            [5, 3],
+            [1, 1],
+            [3, 6],
+            [2, 2],
+            [6, 4],
+            [4, 5]]
+        self.assertTrue(eliminate_pairs(data))

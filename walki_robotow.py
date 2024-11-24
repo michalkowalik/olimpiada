@@ -1,26 +1,18 @@
 #!/usr/bin/env python3
 import sys
 
-# prosty stos:
-class Stack:
-    stack = []
+# can r1 eliminate r2?
+def can_eliminate(r1, r2):
+    return r1[0] > r2[0] or r1[1] > r2[1]
 
-    def push(self, item):
-        self.stack.append(item)
+def find_border(ouback_robots):
+    ouback_robots = set(ouback_robots)
+    inner_robots = set()
+    for r in ouback_robots:
+        if len([x for x in ouback_robots if x[0] > r[0] and x[1] > r[1]]) > 0:
+            inner_robots.add(r)
 
-    def pop(self):
-        if len(self.stack) > 0:
-            return self.stack.pop()
-        raise Exception("Empty stack") 
-
-    def peep(self):
-        if len(self.stack) > 0:
-            return self.stack[-1]
-        raise Exception("Empty stack")
-
-    def is_empty(self):
-        return len(self.stack) == 0
-            
+    return set([x for x in ouback_robots if x not in inner_robots])
 
 # remove the pairs. an expensive approach
 def eliminate_pairs(robots):
@@ -30,7 +22,7 @@ def eliminate_pairs(robots):
         return False
 
     # znajdź robota z największą zwinnością
-    robots.sort(key = lambda x : x[1])
+    robots.sort(key = lambda x : (x[1], -x[0]))
     max_z_robot = robots[-1]
 
     # posortuj po sile
@@ -40,28 +32,36 @@ def eliminate_pairs(robots):
     if max_z_robot[0] >= robots[-1][0]:
         return False
 
-    # jeśli najsilniejszy nie jest najzwinniejszy, to kazdy da się usunąć.
-    # problem mamy jedynie, jeśli 
-    # a) kazdy moze usunąć kazdego
-    # b) mamy niaparzystą ilość robotów na wejściu
+    max_s_robot = robots[-1]
 
-    if len(robots) % 2 == 0:
-        # kaźdy robot moźe być usunięty, parzysta liczba robotów
-        return True
+    # jeśli najsilniejszy nie jest najzwinniejszy, to kazdy da się usunąć.
+    # a) kazdy moze usunąć kazdego - i jest ich nieparztsta ilość
     
-    # zaczynamy sprawdzać czy aktualny robot moze usunąć wszystkie pozostałe roboty.
-    # jeśli tak - kontynuujemy sprawdzanie
-    # jeśli nie - wszystkie roboty mogą być usunięte
-    for (s, z) in robots:
-        eliminated = [x for x in robots if x[0] <= s or x[1] <= z]
-        # eliminated będzie miało długość conajemniej 1 ((s,z)), maksymalnie będzie to
-        # dlugość wejścia. 
-        
-        if len(eliminated) < len(robots):
+
+    #if len(robots) % 2 == 0:
+    #    # kaźdy robot moźe być usunięty, parzysta liczba robotów
+    #    return True
+    
+
+    # znajdź roboty o s > max_z[s] i z > max_s[z]
+    outback_robots = [(x[0], x[1]) for x in robots if x[0] > max_z_robot[0] and x[1] > max_s_robot[1]]
+    border_robots = find_border(outback_robots)
+
+    # max_s i max_z lezą na granicy, musimy dodać
+    border_robots.add((max_s_robot[0], max_s_robot[1]))
+    border_robots.add((max_z_robot[0], max_z_robot[1]))
+
+    if len(border_robots) % 2 == 0:
+        return True
+
+    # dla nieparzystej liczby robotów na granicy:
+    # sprawdzamy, czy istnieje robot, który ma s < max_z(s), ale z większe niz nasz robot na granicy.
+    # jeśli tak, to znaczy, ze moze być ususnięty, a wtedy mozemy idealnie wszystkie roboty usunac:
+    for robot in border_robots:
+        #if len([r for r in robots if (r[0] < robot[0] and r[1] > robot[1]) and (r[0], r[1]) not in border_robots]) > 0:
+        if len([r for r in robots if can_eliminate(r, robot) and (r[0], r[1]) not in border_robots]) > 0:
             return True
 
-
-    # mamy przypadek nieparzystej liczby robotów, gdzie kazdy usuwa kazdego
     return False
 
 def main():
