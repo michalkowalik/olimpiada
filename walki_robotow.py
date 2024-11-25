@@ -5,16 +5,22 @@ import sys
 def can_eliminate(r1, r2):
     return r1[0] > r2[0] or r1[1] > r2[1]
 
+## szukamy robotów lezących na granicy.
+## sortujemy listę po s malejąco
+## jeśli robot o sile s ma zwinność z mniejszą niz aktualna max_z -> nie lezy na granicy
 def find_border(ouback_robots):
-    ouback_robots = set(ouback_robots)
+    ouback_robots.sort(key = lambda x : -x[0])
     inner_robots = set()
+    max_z = 0
+
     for r in ouback_robots:
-        if len([x for x in ouback_robots if x[0] > r[0] and x[1] > r[1]]) > 0:
+        if r[1] < max_z:
             inner_robots.add(r)
+        else:
+            max_z = r[1]
 
     return set([x for x in ouback_robots if x not in inner_robots])
 
-# remove the pairs. an expensive approach
 def eliminate_pairs(robots):
 
     # jeśli mamy tylko jednego robota, nie ma czego dalej sprawdzać:
@@ -34,14 +40,9 @@ def eliminate_pairs(robots):
 
     max_s_robot = robots[-1]
 
-    # jeśli najsilniejszy nie jest najzwinniejszy, to kazdy da się usunąć.
-    # a) kazdy moze usunąć kazdego - i jest ich nieparztsta ilość
-    
-
-    #if len(robots) % 2 == 0:
-    #    # kaźdy robot moźe być usunięty, parzysta liczba robotów
-    #    return True
-    
+    # jeśli najsilniejszy nie jest najzwinniejszy, to kazdy robot moze być usunięty
+    # ale musimy sprawdzić, czy na zewnętrznej granicy obszaru wyznaczonego przez max_s i max_z nie mamy nieparzystej liczby robotów.
+    # te robotu uswają się wzajemnie - jeśli jest ich nieparzysta liczba, wynik jest negatywny.
 
     # znajdź roboty o s > max_z[s] i z > max_s[z]
     outback_robots = [(x[0], x[1]) for x in robots if x[0] > max_z_robot[0] and x[1] > max_s_robot[1]]
@@ -58,7 +59,6 @@ def eliminate_pairs(robots):
     # sprawdzamy, czy istnieje robot, który ma s < max_z(s), ale z większe niz nasz robot na granicy.
     # jeśli tak, to znaczy, ze moze być ususnięty, a wtedy mozemy idealnie wszystkie roboty usunac:
     for robot in border_robots:
-        #if len([r for r in robots if (r[0] < robot[0] and r[1] > robot[1]) and (r[0], r[1]) not in border_robots]) > 0:
         if len([r for r in robots if can_eliminate(r, robot) and (r[0], r[1]) not in border_robots]) > 0:
             return True
 
