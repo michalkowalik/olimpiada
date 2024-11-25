@@ -42,7 +42,7 @@ def eliminate_pairs(robots):
 
     # jeśli najsilniejszy nie jest najzwinniejszy, to kazdy robot moze być usunięty
     # ale musimy sprawdzić, czy na zewnętrznej granicy obszaru wyznaczonego przez max_s i max_z nie mamy nieparzystej liczby robotów.
-    # te robotu uswają się wzajemnie - jeśli jest ich nieparzysta liczba, wynik jest negatywny.
+    # te roboty uswają się wzajemnie - jeśli jest ich nieparzysta liczba, wynik jest negatywny.
 
     # znajdź roboty o s > max_z[s] i z > max_s[z]
     outback_robots = [(x[0], x[1]) for x in robots if x[0] > max_z_robot[0] and x[1] > max_s_robot[1]]
