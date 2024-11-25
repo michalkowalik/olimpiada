@@ -14,7 +14,7 @@ done
 echo ""
 echo "Part 1 done"
 
-# part 1
+# part 2
 TEST_PATH="walrob/input2"
 OUT_PATH="walrob/output2"
 
