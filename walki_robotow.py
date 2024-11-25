@@ -11,10 +11,10 @@ def can_eliminate(r1, r2):
 def find_border(ouback_robots):
     ouback_robots.sort(key = lambda x : -x[0])
     inner_robots = set()
-    max_z = 0
+    max_z = -1
 
     for r in ouback_robots:
-        if r[1] < max_z:
+        if r[1] <= max_z:
             inner_robots.add(r)
         else:
             max_z = r[1]

@@ -11,6 +11,7 @@ do
 
     [ "$program_output" != "$expected" ] && echo "Test $i failed" || echo -n "."
 done
+echo ""
 echo "Part 1 done"
 
 # part 1
@@ -24,4 +25,5 @@ do
 
     [ "$program_output" != "$expected" ] && echo "Test $i failed" || echo -n "."
 done
+echo ""
 echo "Part 2 done"
